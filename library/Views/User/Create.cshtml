@@ -1,0 +1,36 @@
+﻿<h2>Enter your details</h2><br><br>
+     
+<div ng-controller="NewUser">
+    
+    <form name="success" method="post" action="success">    
+        <input type="hidden" id="id" name="id">
+    </form>
+        
+    <form name="user" ng-submit="submit()" novalidate>
+         
+        <label>Name</label>
+        
+        <input type="text" name="name" ng-model="name" ng-pattern="/^[a-zA-Z ]*$/" 
+               required />
+        <p ng-hide="user.name.$valid || user.name.$pristine ">Special characters/Numbers not allowed</p>
+        
+        <label>Username</label>
+        <input type="text" name="username" ng-model="username" ng-pattern="/^[a-zA-Z0-9 ]*$/"
+               required />
+        <p ng-hide="user.username.$valid || user.username.$pristine ">No special characters allowed</p>
+        
+        <label>Password</label>
+        <input type="password" name="password" ng-model="password"
+               required />
+        
+        <label>Age</label>
+        <input type="text" name="age" ng-model="age" ng-pattern="/^[0-9]*$/" required />
+        <p ng-hide="user.age.$valid || user.age.$pristine ">Numbers only !</p>
+        <br><br>
+           
+        <button type="submit" ng-disabled="user.$invalid">Submit</button>
+        
+    </form>
+     
+     </form>
+</div>

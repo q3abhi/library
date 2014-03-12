@@ -1,0 +1,28 @@
+﻿@model IList<ModelLibrary.UserBookRequest>
+
+<h2>Book Requests</h2>
+<br/><br/>
+
+<table>
+    
+    <th>Name</th>
+    <th>Status</th>
+    <th></th>   
+
+    @foreach (var userBookRequest in Model)
+    {      
+        <tr>
+            <td>@userBookRequest.BookRequest.Book.Name</td>
+            @if (userBookRequest.Approval.Equals(0))
+            {
+                <td align="center">Pending</td>
+            }
+            else
+            {
+                <td align="center">Approved</td>
+                <td><button ng-controller="ReturnBook" ng-click="return(@userBookRequest.Id,@userBookRequest.User.Id,'@userBookRequest.BookRequest.Book.Name')">Return</button></td>
+            }
+        </tr>
+    }
+
+</table>

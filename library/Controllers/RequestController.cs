@@ -1,0 +1,180 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Web.Mvc;
+using ModelLibrary;
+using ServiceLibrary;
+
+namespace library.Controllers
+{
+    public class RequestController : Controller
+    {
+        private SessionObjects sessionObj = SessionObjects.CreateInstance();
+
+        [HttpGet]
+        public ActionResult ViewBookRequest(String userId)
+        {
+            try
+            {
+                int userid = Convert.ToInt32(userId);
+                Boolean sessionState = sessionObj.CheckSession(userid);
+
+                if (sessionState)
+                {
+                    IUserBookRequestService userBookRequestService = new UserBookRequestService();
+                    IList<UserBookRequest> userBookRequestList = userBookRequestService.ReadAllActiveRequestsForUser(userid);
+                    return View(userBookRequestList);
+                }
+                return Content("Failed");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error at ViewBookRequest");
+                Console.Write(e.ToString());
+                return Content("Failed");
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult Add(String bookId, String userId)
+        {
+            try
+            {
+                int userid = Convert.ToInt32(userId);
+                int bookid = Convert.ToInt32(bookId);
+                Boolean sessionState = sessionObj.CheckSession(userid);
+
+                if (sessionState)
+                {
+                    IBookRequestService bookRequestService = new BookRequestService();
+                    IUserBookRequestService userBookRequestService = new UserBookRequestService();
+                    Boolean bookRequestStatus = bookRequestService.Add(bookid);
+                    Boolean userBookRequestStatus = userBookRequestService.Add(userid, bookid);
+
+                    if ((bookRequestStatus && userBookRequestStatus).Equals(true))
+                    {
+                        return Content("Success");
+                    }
+                    return Content("Failed");
+                }
+            }
+
+            catch (Exception e)
+            {
+                Console.WriteLine("Error in BookRequestController , Add()");
+                Console.Write(e.ToString());
+                return Content("Failed");
+            }
+            return Content("Failed");
+        }
+
+        [HttpGet]
+        public ActionResult ApproveBookRequestsPage(String userId)
+        {
+            try
+            {
+                int userid = Convert.ToInt32(userId);
+                Boolean sessionState = sessionObj.CheckSession(userid);
+
+                if (sessionState)
+                {
+                    IBookRequestService bookRequestService = new BookRequestService();
+                    IList<UserBookRequest> userBookRequests = bookRequestService.FetchAllPendingRequests();
+                    ViewBag.id = userId;
+                    return View(userBookRequests);
+                }
+                return View("Error");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error in BookRequestController , ApproveBookRequestsPage()");
+                Console.Write(e.ToString());
+                return View("Error");
+            }
+
+        }
+
+        [HttpPost]
+        public ActionResult ApproveRequest(String requestId,String userId)
+        {
+            try
+            {
+                int userid = Convert.ToInt32(userId);
+                int requestid = Convert.ToInt32(requestId);
+                Boolean sessionState = sessionObj.CheckSession(userid);
+
+                if (sessionState)
+                {
+                    IUserBookRequestService userBookRequestService = new UserBookRequestService();
+                    Boolean approvalStatus = userBookRequestService.ApproveBookRequestForUser(requestid);
+
+                    if ((approvalStatus).Equals(true))
+                    {
+                        return Content("Success");
+                    }
+                    return Content("Failed");
+                }
+            }
+
+            catch (Exception e)
+            {
+                Console.WriteLine("Error in BookRequestController , Add()");
+                Console.Write(e.ToString());
+                return Content("Failed");
+            }
+            return Content("Failed");
+        }
+
+        public ActionResult ViewReturnsPage(String userId)
+        {
+            try
+            {
+                int userid = Convert.ToInt32(userId);
+                Boolean sessionState = sessionObj.CheckSession(userid);
+                if (sessionState)
+                {
+                    IBookRequestService bookRequestService = new BookRequestService();
+                    //IList<UserBookRequest> userBookRequests = bookRequestService.FetchPendingRequests();
+//                    return View();
+                    return null;
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error in BookRequestController , ViewReturnsPage()");
+                Console.Write(e.ToString());
+                return View("Error");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult BookReturn(String userId, String returnId)
+        {
+            try
+            {
+                int userid = Convert.ToInt32(userId);
+                int returnid = Convert.ToInt32(returnId);
+                Boolean sessionState = sessionObj.CheckSession(userid);
+
+                if (sessionState)
+                {
+                    IUserBookRequestService userBookRequestService = new UserBookRequestService();
+                    var status = userBookRequestService.DeleteBookRequestForUser(returnid);
+                    if (status)
+                    {
+                        return Content("Success");
+                    }
+                }
+                return Content("Failed");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error in BookRequestController , BookRet");
+                Console.Write(e.ToString());
+                return Content("Failed");
+            }
+        }
+    }
+}

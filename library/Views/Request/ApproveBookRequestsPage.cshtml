@@ -1,0 +1,30 @@
+﻿@model IList<ModelLibrary.UserBookRequest>
+
+<h2>Book Requests</h2>
+<br/><br/>
+
+<table>
+    
+    <th>Book</th>
+    <th>User</th>
+    <th>Approval Status</th>
+    <th></th>   
+
+    @foreach (var userBookRequest in Model)
+    {      
+        <tr>
+            <td>@userBookRequest.BookRequest.Book.Name</td>
+            <td>@userBookRequest.User.Name</td>
+            @if (userBookRequest.Approval.Equals(0))
+            {
+                <td align='center'>Pending</td>
+                <td><button ng-controller="ApproveRequest" ng-click="approve(@userBookRequest.Id,'@userBookRequest.BookRequest.Book.Name',@ViewBag.id)">Approve</button></td>
+            }
+            else
+            {
+                <td align='center'>Approved</td>
+            }
+        </tr>
+    }
+
+</table>

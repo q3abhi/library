@@ -1,0 +1,77 @@
+﻿@model ModelLibrary.Session
+       
+        <h2>Welcome @Model.Name</h2>
+        <br/><br/>
+        
+        @foreach (var token in Model.Tokens)
+        {
+            if (token.Equals("Add Books"))
+            {
+               <a href="/book/AddBooksPage">@token</a>
+               <br/><br/>                              
+            }
+
+            if (token.Equals("View Books"))
+            {
+                foreach (var role in Model.Roles)
+                {
+                    if (role.Equals("Administrator"))
+                    {
+                        <a href="/book/ViewBooks?id=@Model.UserId">@token</a>
+                        <br/>
+                        <br/>
+                     }
+                    else
+                    {
+                        <a href="/book/ViewBooksUser?id=@Model.UserId">@token</a>
+                        <br/>
+                        <br/>
+                    }
+                    break;
+                }
+            }
+
+            if (token.Equals("Request a book"))
+            {
+               <a href="/book/RequestBookPage?id=@Model.UserId">@token</a>
+               <br/><br/>                              
+            }
+
+
+            if (token.Equals("Approve Books"))
+            {
+               <a href="/request/ApproveBookRequestsPage?userId=@Model.UserId">@token</a>
+               <br/><br/>                              
+            }
+
+            if (token.Equals("View Requested Books"))
+            {
+                <a href="/request/ViewBookRequest?userId=@Model.UserId">@token</a>
+                <br/><br/>
+            }
+
+            if (token.Equals("Return Books"))
+            {
+                <a href="/request/ViewReturnsPage?userId=@Model.UserId">@token</a>
+                <br/><br/>
+            }
+
+            if (token.Equals("Search a Book"))
+            {
+                <a href="/book/SearchBook?userId=@Model.UserId">@token</a>
+                <br/><br/>
+            }
+
+            if (token.Equals("Search Users"))
+            {
+                <a href="/user/SearchUser?userId=@Model.UserId">@token</a>
+                <br/><br/>
+            }
+        }
+
+<div ng-controller="logout">    
+      <button ng-click="logout(@Model.UserId)">Logout</button>
+</div>
+
+
+    

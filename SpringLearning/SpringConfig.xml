@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <configSections>
+    <sectionGroup name="spring">
+      <section name="context" type="Spring.Context.Support.ContextHandler, Spring.Core"/>
+      <section name="objects" type="Spring.Context.Support.DefaultSectionHandler, Spring.Core" />
+    </sectionGroup>
+  </configSections>
+  
+  <spring>
+    <context>
+      <resource uri="config://spring/objects"/>
+    </context>
+    <objects xmlns="http://www.springframework.net">
+      
+      <object name="triangle"
+              type="SpringLearning.Triangle, SpringLearning">
+        <property name="implementsShape" ref="Shape" />
+      </object>
+
+      <object name="Shape"
+              type ="SpringLearning.IShape, SpringLearning">        
+      </object>
+      
+    </objects>
+  </spring>
+</configuration>

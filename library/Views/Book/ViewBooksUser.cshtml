@@ -1,0 +1,23 @@
+﻿@model IList<ModelLibrary.Book>
+
+<h2>Books in the library</h2>
+<br/><br/>
+
+<table>
+    
+    <th>Name</th>
+    <th>Description</th>   
+    <th>Author</th>
+    <th>Publisher</th>
+
+    @foreach (var book in Model)
+    {
+        <tr>
+            <td>@book.Name</td>
+            <td>@book.Description</td>
+            <td>@book.Author</td>
+            <td>@book.Publisher</td>
+        </tr>
+    }
+
+</table>

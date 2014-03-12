@@ -1,0 +1,35 @@
+﻿@model IList<ModelLibrary.Book>
+
+<h2>Books in the library</h2>
+<br/><br/>
+<div ng-controller="RequestBooks">
+<table>
+    
+    <th>Name</th>
+    <th>Description</th>   
+    <th>Author</th>
+    <th>Publisher</th>
+    <th></th>
+
+    @foreach (var book in Model)
+    {
+
+            <tr>
+                
+                <td>@book.Name</td>
+                <td>@book.Description</td>
+                <td>@book.Author</td>
+                <td>@book.Publisher</td>
+                @if (book.ToBeIssued > 0)
+                {
+                  <td><button ng-click="request(@book.Id,'@book.Name',@ViewBag.id)">Request</button></td>
+                }
+                else
+                {
+                  <td>Not available</td>
+                }
+
+            </tr>
+        }
+</table>
+</div>
