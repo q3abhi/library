@@ -7,9 +7,9 @@ Csproj file : library>library>library.csproj
 
 Directories >>
 
-Class Library
-Model Library
-Service Library
-Dal Library
-Test Library
+Class Library ||
+Model Library || 
+Service Library ||
+Dal Library ||
+Test Library ||
 Library (Controllers, Views)
