@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using library.Filters;
 using ModelLibrary;
 using ServiceLibrary;
 
 namespace library.Controllers
 {
+    [SessionChecker]
     public class RequestController : Controller
     {
-        private SessionObjects sessionObj = SessionObjects.CreateInstance();
 
         [HttpGet]
         public ActionResult ViewBookRequest(String userId)
@@ -17,15 +17,9 @@ namespace library.Controllers
             try
             {
                 int userid = Convert.ToInt32(userId);
-                Boolean sessionState = sessionObj.CheckSession(userid);
-
-                if (sessionState)
-                {
-                    IUserBookRequestService userBookRequestService = new UserBookRequestService();
-                    IList<UserBookRequest> userBookRequestList = userBookRequestService.ReadAllActiveRequestsForUser(userid);
-                    return View(userBookRequestList);
-                }
-                return Content("Failed");
+                IUserBookRequestService userBookRequestService = new UserBookRequestService();
+                IList<UserBookRequest> userBookRequestList = userBookRequestService.ReadAllActiveRequestsForUser(userid);
+                return View(userBookRequestList);
             }
             catch (Exception e)
             {
@@ -43,21 +37,17 @@ namespace library.Controllers
             {
                 int userid = Convert.ToInt32(userId);
                 int bookid = Convert.ToInt32(bookId);
-                Boolean sessionState = sessionObj.CheckSession(userid);
+                IBookRequestService bookRequestService = new BookRequestService();
+                IUserBookRequestService userBookRequestService = new UserBookRequestService();
+                Boolean bookRequestStatus = bookRequestService.Add(bookid);
+                Boolean userBookRequestStatus = userBookRequestService.Add(userid, bookid);
 
-                if (sessionState)
+                if ((bookRequestStatus && userBookRequestStatus).Equals(true))
                 {
-                    IBookRequestService bookRequestService = new BookRequestService();
-                    IUserBookRequestService userBookRequestService = new UserBookRequestService();
-                    Boolean bookRequestStatus = bookRequestService.Add(bookid);
-                    Boolean userBookRequestStatus = userBookRequestService.Add(userid, bookid);
-
-                    if ((bookRequestStatus && userBookRequestStatus).Equals(true))
-                    {
-                        return Content("Success");
-                    }
-                    return Content("Failed");
+                    return Content("Success");
                 }
+
+                return Content("Failed");
             }
 
             catch (Exception e)
@@ -66,25 +56,18 @@ namespace library.Controllers
                 Console.Write(e.ToString());
                 return Content("Failed");
             }
-            return Content("Failed");
+            
         }
 
         [HttpGet]
         public ActionResult ApproveBookRequestsPage(String userId)
         {
             try
-            {
-                int userid = Convert.ToInt32(userId);
-                Boolean sessionState = sessionObj.CheckSession(userid);
-
-                if (sessionState)
-                {
-                    IBookRequestService bookRequestService = new BookRequestService();
-                    IList<UserBookRequest> userBookRequests = bookRequestService.FetchAllPendingRequests();
-                    ViewBag.id = userId;
-                    return View(userBookRequests);
-                }
-                return View("Error");
+            {  
+                IBookRequestService bookRequestService = new BookRequestService();
+                IList<UserBookRequest> userBookRequests = bookRequestService.FetchAllPendingRequests();
+                ViewBag.id = userId;
+                return View(userBookRequests);            
             }
             catch (Exception e)
             {
@@ -100,21 +83,16 @@ namespace library.Controllers
         {
             try
             {
-                int userid = Convert.ToInt32(userId);
                 int requestid = Convert.ToInt32(requestId);
-                Boolean sessionState = sessionObj.CheckSession(userid);
 
-                if (sessionState)
+                IUserBookRequestService userBookRequestService = new UserBookRequestService();
+                Boolean approvalStatus = userBookRequestService.ApproveBookRequestForUser(requestid);
+
+                if ((approvalStatus).Equals(true))
                 {
-                    IUserBookRequestService userBookRequestService = new UserBookRequestService();
-                    Boolean approvalStatus = userBookRequestService.ApproveBookRequestForUser(requestid);
-
-                    if ((approvalStatus).Equals(true))
-                    {
-                        return Content("Success");
-                    }
-                    return Content("Failed");
+                    return Content("Success");
                 }
+                return Content("Failed");
             }
 
             catch (Exception e)
@@ -123,23 +101,17 @@ namespace library.Controllers
                 Console.Write(e.ToString());
                 return Content("Failed");
             }
-            return Content("Failed");
+ 
         }
 
         public ActionResult ViewReturnsPage(String userId)
         {
             try
-            {
-                int userid = Convert.ToInt32(userId);
-                Boolean sessionState = sessionObj.CheckSession(userid);
-                if (sessionState)
-                {
-                    IBookRequestService bookRequestService = new BookRequestService();
-                    //IList<UserBookRequest> userBookRequests = bookRequestService.FetchPendingRequests();
-//                    return View();
-                    return null;
-                }
-                return null;
+            {  
+                 //IBookRequestService bookRequestService;
+                 //IList<UserBookRequest> userBookRequests = bookRequestService.FetchPendingRequests();
+                 //return View();
+              return null;
             }
             catch (Exception e)
             {
@@ -154,18 +126,13 @@ namespace library.Controllers
         {
             try
             {
-                int userid = Convert.ToInt32(userId);
                 int returnid = Convert.ToInt32(returnId);
-                Boolean sessionState = sessionObj.CheckSession(userid);
 
-                if (sessionState)
+                IUserBookRequestService userBookRequestService = new UserBookRequestService();
+                var status = userBookRequestService.DeleteBookRequestForUser(returnid);
+                if (status)
                 {
-                    IUserBookRequestService userBookRequestService = new UserBookRequestService();
-                    var status = userBookRequestService.DeleteBookRequestForUser(returnid);
-                    if (status)
-                    {
-                        return Content("Success");
-                    }
+                    return Content("Success");
                 }
                 return Content("Failed");
             }

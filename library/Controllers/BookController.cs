@@ -54,10 +54,9 @@ namespace library.Controllers
 
                     return View(books);
                 }
-                return View("Error");
-
+               return View("Error");
             }
-                
+                  
             catch (Exception e)
             {
                 Console.WriteLine("Error retrieving books");
@@ -106,7 +105,6 @@ namespace library.Controllers
 
             if (sessionState)
             {
-                Session session = sessionObj.GetSession(code);
                 IBookService bookService = new BookService();
                 IList<Book> books = bookService.GetAllBooks();
                 return View(books);
@@ -135,10 +133,7 @@ namespace library.Controllers
                     {
                         return Content("Success");
                     }
-                    else
-                    {
-                        return Content("Failed");
-                    }
+                    return Content("Failed");
                 }
 
                 return View("Error");
