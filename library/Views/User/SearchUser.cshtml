@@ -1,0 +1,52 @@
+﻿@{ Layout = ""; }
+@model IList<ModelLibrary.UserBookRequest>
+<div>
+    
+  @if (Model.FirstOrDefault()!=null)
+  {
+      <table>  
+          <th>Name</th>
+          <th>Username</th>
+          <th>Active</th>
+          <th>Previous</th>
+          <th align="center">Assigned Date</th>
+
+
+          @foreach (var user in Model)
+          {
+              <tr>
+                
+                  <td>@user.User.Name</td>
+                  <td align="center">@user.User.Username</td>
+
+                  @if (user.IsActive == 1)
+                  {
+                      <td align="center">@user.BookRequest.Book.Name</td>
+                  }
+                  else
+                  {
+                      <td align="center"></td>
+                  }
+
+                  @if (user.IsActive == 0)
+                  {
+                      <td align="center">@user.BookRequest.Book.Name</td>
+                  }
+                  else
+                  {
+                      <td align="center"></td>
+                  }
+
+                  <td>@user.CreatedDateTime</td>
+                 
+
+              </tr>
+          }
+        
+      </table>
+  }
+  else
+  {
+      <b>No results</b>
+  }
+</div>

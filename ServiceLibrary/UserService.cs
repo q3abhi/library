@@ -13,7 +13,6 @@ namespace ServiceLibrary
         {
             try
             {
-
                 IList<User> userlist = new List<User>();
                 userlist.Add(user);
 
@@ -28,8 +27,6 @@ namespace ServiceLibrary
                 Console.Write(e.ToString());
                 return false;
             }
-
-
         }
 
 
@@ -41,7 +38,6 @@ namespace ServiceLibrary
             user.Password = password;
 
             IUserDal userDal = new UserDal();
-     //       Object[] values = userDal.ValidateUser(user);
 
             return user;
         }
@@ -84,6 +80,22 @@ namespace ServiceLibrary
             User user = userDal.FindById(id);
 
             return user;            
+        }
+
+        public IList<UserBookRequest> UserSearch(String searchString)
+        {
+            try
+            {
+                IUserDal userDal = new UserDal();
+                IList<UserBookRequest> returnedUserList = userDal.SearchUser(searchString);
+                return returnedUserList;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error in userService,userSearch()");
+                Console.Write(e.ToString());
+                return null;
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-var angular = angular.module("library", []);
+var angular = angular.module("library", ['ngSanitize']);
 
 angular.service("session", function () {
 
@@ -57,30 +57,29 @@ angular.controller("login", function ($scope, $http, session) {
 
 });
 
-angular.controller("NewUser", function($scope, $http) {
-    
-    $scope.submit = function() {
-        
+angular.controller("NewUser", function ($scope, $http) {
+
+    $scope.submit = function () {
+
         var newUserUrl = "/user/CreateUser";
-        
+
         var userJson = ({
-            "Name":$scope.name,
-            "Age":$scope.age,
-            "Username" : $scope.username,
-            "Password" : $scope.password
+            "Name": $scope.name,
+            "Age": $scope.age,
+            "Username": $scope.username,
+            "Password": $scope.password
         });
-        
-        $http.post(newUserUrl,userJson).success(function(response) {
-            
-            if(response==="Success") {
+
+        $http.post(newUserUrl, userJson).success(function (response) {
+
+            if (response === "Success") {
                 document.forms[0].submit();
-            }
-            else {
+            } else {
                 window.location = "../Error";
             }
-            
-            
-            
+
+
+
         });
     }
 });
@@ -109,7 +108,7 @@ angular.controller("AddBooks", function ($scope, $http, session) {
                 window.history.back();
 
             });
-      }
+    }
 });
 
 angular.controller("RequestBooks", function ($scope, $http, session) {
@@ -138,85 +137,129 @@ angular.controller("RequestBooks", function ($scope, $http, session) {
 });
 
 angular.controller("ApproveRequest", function ($scope, $http) {
-        var approveRequestUrl = "/request/ApproveRequest";
-        $scope.approve = function (requestId, bookName, userId) {
-            var status = window.confirm("Do you want to approve request for '" + bookName + "' ?");
+    var approveRequestUrl = "/request/ApproveRequest";
+    $scope.approve = function (requestId, bookName, userId) {
+        var status = window.confirm("Do you want to approve request for '" + bookName + "' ?");
 
-            if (status) {
-                var jsonData = ({
-                    "requestId": requestId,
-                    "userId": userId
-                });
+        if (status) {
+            var jsonData = ({
+                "requestId": requestId,
+                "userId": userId
+            });
 
-                $http.post(approveRequestUrl, jsonData).success(function (response) {
+            $http.post(approveRequestUrl, jsonData).success(function (response) {
 
-                    if (response === "Success") {
-                        alert("Request for " + bookName + " has been approved");
-                        location.reload();
-                    }
+                if (response === "Success") {
+                    alert("Request for " + bookName + " has been approved");
+                    location.reload();
+                }
 
-                    if (response === "Failed") {
-                        alert("Your request could not be submitted.Please try after sometime");
-                        window.history.back();
-                    }
+                if (response === "Failed") {
+                    alert("Your request could not be submitted.Please try after sometime");
+                    window.history.back();
+                }
 
-                    
-                });
-            }
+
+            });
         }
+    }
 
+});
+
+angular.controller("ReturnBook", function ($scope, $http) {
+    var returnBookUrl = "/request/BookReturn";
+    $scope.
+    return = function (returnId, userId, bookName) {
+
+        var status = window.confirm("Do you wanna return '" + bookName + "' ?");
+
+        if (status) {
+            var jsonData = ({
+                "returnId": returnId,
+                "userId": userId
+            });
+            $http.post(returnBookUrl, jsonData).success(function (response) {
+
+                if (response === "Success") {
+                    alert(bookName + " has been returned back");
+                    location.reload();
+                }
+
+                if (response === "Failed") {
+                    alert("Your request could not be submitted.Please try after sometime");
+                    window.history.back();
+                }
+            });
+        }
+    }
+});
+
+
+angular.controller("logout", function ($scope, $http) {
+
+    var logoutUrl = "/user/logout";
+    //    var id = session.getUserId();
+    //    var userId = ({"id":id});
+
+    $scope.logout = function (data) {
+
+        var id = data;
+        var userId = ({
+            "id": id
         });
 
-    angular.controller("ReturnBook", function ($scope, $http) {
-        var returnBookUrl = "/request/BookReturn";
-        $scope.
-        return = function (returnId, userId, bookName) {
+        $http.post(logoutUrl, userId).success(function (data) {
 
-            var status = window.confirm("Do you wanna return '" + bookName + "' ?");
+            if (data === "Success")
+                window.location = "/user/loginPage";
+            else
+                window.location = "user/error";
+        });
 
-            if (status) {
-                var jsonData = ({
-                    "returnId": returnId,
-                    "userId": userId
-                });
-                $http.post(returnBookUrl, jsonData).success(function (response) {
+    };
 
-                    if (response === "Success") {
-                        alert(bookName + " has been returned back");
-                        location.reload();
-                    }
+});
 
-                    if (response === "Failed") {
-                        alert("Your request could not be submitted.Please try after sometime");
-                        window.history.back();
-                    }
-                });
-            }
-        }
-    });
+angular.controller("bookSearch", function ($scope, $http) {
 
+    var searchUrl = "/book/SearchBook";
+    $scope.submitSearch = function (userId) {
+        $scope.loadingFlag = true;
+        var jsonData = ({
+            "searchString": $scope.searchString,
+            "userId": userId
+        });
 
-    angular.controller("logout", function ($scope, $http) {
+        $http.post(searchUrl, jsonData).success(function (data) {
 
-        var logoutUrl = "/user/logout";
-        //    var id = session.getUserId();
-        //    var userId = ({"id":id});
+            $scope.loadingFlag = false;
+            $scope.resultFlag = true;
+            var result = data;
+            $scope.result = result;
+        });
 
-        $scope.logout = function (data) {
+    };
 
-            var id = data;
-            var userId = ({
-                "id": id
-            });
+});
 
-            $http.post(logoutUrl, userId).success(function (data) {
+angular.controller("userSearch", function ($scope, $http) {
 
-                if (data === "Success")
-                    window.location = "/user/loginPage";
-                else
-                    window.location = "user/error";
-            });
+    var searchUrl = "/user/SearchUser";
+    $scope.submitSearch = function (userId) {
+        $scope.loadingFlag = true;
+        var jsonData = ({
+            "searchString": $scope.searchString,
+            "userId": userId
+        });
 
-        };
+        $http.post(searchUrl, jsonData).success(function (data) {
 
-    });
+            $scope.loadingFlag = false;
+            $scope.resultFlag = true;
+            var result = data;
+            $scope.result = result;
+        });
+
+    };
+
+});

@@ -9,5 +9,6 @@ namespace DalLibrary
         IList<Book> GetAllBooks();
         Boolean SaveBooks(IList<Book> books);
         Book GetById(int id);
+        IList<Book> SearchBook(String searchString);
     }
 }

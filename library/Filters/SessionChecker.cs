@@ -9,14 +9,23 @@ namespace library.Filters
         
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            SessionObjects sessionObj = SessionObjects.CreateInstance();
-            String id = (String)filterContext.ActionParameters["userId"];
-            int code = Int32.Parse(id);
-            Boolean sessionState = sessionObj.CheckSession(code);
-
-            if (!sessionState)
+            try
             {
-                var route = new RouteValueDictionary {{"controller", "User"}, {"action", "Error"}};
+                SessionObjects sessionObj = SessionObjects.CreateInstance();
+                String id = (String) filterContext.ActionParameters["userId"];
+                int code = Int32.Parse(id);
+                Boolean sessionState = sessionObj.CheckSession(code);
+
+                if (!sessionState)
+                {
+                    var route = new RouteValueDictionary {{"controller", "User"}, {"action", "Error"}};
+                    filterContext.Result = new RedirectToRouteResult(route);
+                }
+            }
+
+            catch (Exception e)
+            {
+                var route = new RouteValueDictionary { { "controller", "User" }, { "action", "Error" } };
                 filterContext.Result = new RedirectToRouteResult(route);
             }
         }

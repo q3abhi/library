@@ -175,7 +175,6 @@
     <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="Controllers\HelloController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Filters\SessionChecker.cs" />
@@ -391,6 +390,18 @@
   <ItemGroup>
     <Content Include="Views\Request\ApproveBookRequestsPage.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Book\SearchBookPage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Book\SearchBook.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\User\SearchUser.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\User\SearchUserPage.cshtml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -407,7 +418,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>54760</DevelopmentServerPort>
+          <DevelopmentServerPort>52261</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

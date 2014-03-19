@@ -90,6 +90,23 @@ namespace ServiceLibrary
                 return null;
             }
         }
+
+        public IList<Book> BookSearch(String searchString)
+        {
+            try
+            {
+                IBookDal bookDal = new BookDal();
+                IList<Book> returnedBookList = bookDal.SearchBook(searchString);
+                return returnedBookList;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error in BookService,BookSearch()");
+                Console.Write(e.ToString());
+                return null;
+            }
+        }
     }
 }
     

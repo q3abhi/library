@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using library.Filters;
 using ModelLibrary;
 using ServiceLibrary;
 
@@ -109,6 +111,43 @@ namespace library.Controllers
             }
 
             return Content("Failed");
+        }
+
+        [HttpGet]
+        [SessionChecker]
+        public ActionResult SearchUserPage(String userId)
+        {
+            try
+            {
+                ViewBag.userId = userId;
+                return View();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("SearchUserPage Error");
+                Console.Write(e.ToString());
+                return View("Error");
+            }
+  
+        }
+
+        [HttpPost]
+        [SessionChecker]
+        public ActionResult SearchUser(String userId, String searchString)
+        {
+            try
+            {
+                ViewBag.userId = userId;
+                IUserService userService = new UserService();
+                IList<UserBookRequest> userList = userService.UserSearch(searchString);
+                return View(userList);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("SearchUser Error");
+                Console.Write(e.ToString());
+                return Content("Error");
+            }
         }
 
     }

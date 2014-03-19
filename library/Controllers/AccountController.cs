@@ -59,7 +59,7 @@ namespace library.Controllers
 
         //
         // GET: /Account/Register
-
+        [Authorize]
         [AllowAnonymous]
         public ActionResult Register()
         {

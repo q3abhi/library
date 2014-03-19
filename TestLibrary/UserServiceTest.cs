@@ -3,6 +3,7 @@ using System.Web.Script.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModelLibrary;
 using ServiceLibrary;
+using System.Collections.Generic;
 
 namespace TestLibrary
 {
@@ -21,7 +22,7 @@ namespace TestLibrary
     //        Assert.AreEqual(user,uservice.Create("Abhishek",24,"abhi","1234"));
     } 
 
-          [TestMethod]
+//          [TestMethod]
         public void TestValidateUser()
         {
             UserService service = new UserService();
@@ -42,6 +43,20 @@ namespace TestLibrary
             Assert.IsNotNull(user);
 
             Console.WriteLine(user.Age);
+        }
+
+        [TestMethod]
+        public void TestUserSearch()
+        {
+            String searchString = "q3";
+            IUserService userService = new UserService();
+            IList<UserBookRequest> returnedList  = userService.UserSearch(searchString);
+            foreach (var ubr in returnedList)
+            {
+                Console.WriteLine(ubr.BookRequest.Book.Name);
+            }
+            Assert.IsNotNull(returnedList);
+
         }
 
     }

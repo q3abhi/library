@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using library.Filters;
 using ModelLibrary;
 using ServiceLibrary;
 
@@ -145,6 +147,40 @@ namespace library.Controllers
                 Console.Write(e.ToString());
                 return View("Error");
             }           
+        }
+
+        [HttpGet]
+        [SessionChecker]
+        public ActionResult SearchBookPage(String userId)
+        {
+            try
+            {
+                ViewBag.userId = userId;
+                return View();
+            }
+            catch (Exception e)
+            {
+                return View("Error");
+            }            
+        }
+
+        [HttpPost]
+        [SessionChecker]
+        public ActionResult SearchBook(String userId , String searchString)
+        {
+            try
+            {
+                ViewBag.userId = userId;
+                IBookService bookService = new BookService();
+                IList<Book> bookList = bookService.BookSearch(searchString);
+                return View(bookList);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("SearchBook Error");
+                Console.Write(e.ToString());
+                return Content("Error");
+            }
         }
     }
 }

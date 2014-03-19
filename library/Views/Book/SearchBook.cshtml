@@ -1,0 +1,31 @@
+﻿@{ Layout = ""; }
+@model IList<ModelLibrary.Book>
+<div ng-controller="RequestBooks">
+    
+  @if (Model.FirstOrDefault()!=null)
+  {
+      <table>  
+          <th>Name</th>
+          <th>Description</th>   
+          <th>Author</th>
+          <th>Publisher</th>
+          <th></th>
+
+          @foreach (var book in Model)
+          {
+              <tr>
+                
+                  <td>@book.Name</td>
+                  <td>@book.Description</td>
+                  <td>@book.Author</td>
+                  <td>@book.Publisher</td>
+              </tr>
+          }
+        
+      </table>
+  }
+  else
+  {
+      <b>No results</b>
+  }
+</div>

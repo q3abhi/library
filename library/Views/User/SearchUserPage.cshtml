@@ -1,0 +1,23 @@
+﻿
+<div ng-controller="userSearch">
+
+    <h2>Search Users</h2>
+
+    <br/>
+    <br/>
+    <form ng-submit="submitSearch(@ViewBag.userId)">
+        
+        <label>Search by Users by Name/Username</label>
+        <input type="text" ng-model="searchString" />
+        <button type="submit">Search</button>
+        
+    </form>
+    <br>
+    
+    <div ng-show="loadingFlag">
+        <img src="../../Content/36.gif"></img>
+    </div>
+
+    <div ng-bind-html="result" ng-show="resultFlag"></div>
+
+</div>

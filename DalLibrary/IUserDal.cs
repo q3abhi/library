@@ -9,5 +9,6 @@ namespace DalLibrary
          User ValidateUser(User user);
          User FindById(int id);
          Boolean CreateNewUser(IList<User> userList);
+         IList<UserBookRequest> SearchUser(String searchString);
     }
 }

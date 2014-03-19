@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ModelLibrary;
 using NHibernate;
+using NHibernate.Criterion;
 
 namespace DalLibrary
 {
@@ -81,6 +82,32 @@ namespace DalLibrary
                 return null;
             }          
             
+        }
+
+        public IList<Book> SearchBook(String searchString)
+        {
+            try
+            {
+                IDal<Book> dal = new Dal<Book>();
+                NHibernate.ISession session = dal.GetSession();
+                var criteriaQuery = session.CreateCriteria<Book>()
+                    .Add(Restrictions.Disjunction()
+                        .Add(Restrictions.Like("Name", "%"+searchString+"%"))
+                        .Add(Restrictions.Like("Author", "%" + searchString + "%"))
+                        .Add(Restrictions.Like("Publisher", "%"+searchString+"%"))
+                        .Add(Restrictions.Like("Description", "%" + searchString + "%")));
+
+                IList<Book> returnedList = dal.Search(criteriaQuery);
+
+                return returnedList;
+            }
+
+            catch (Exception e)
+            {
+                Console.WriteLine("Some problem with BookDal SearchBook()");
+                Console.Write(e.ToString());
+                return null;
+            }     
         }
     }
 }

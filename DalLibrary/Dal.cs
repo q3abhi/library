@@ -56,7 +56,23 @@ namespace DalLibrary
             }
        }
 
-        protected NHibernate.ISession GetSession()
+        public IList<T> Search(ICriteria criteriaQuery)
+        {
+            try
+            {
+                IList<T> resultList = criteriaQuery.List<T>();
+
+                return resultList;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Cannot search. Error at Dal , Search()");
+                Console.Write(e.ToString());
+                return null;
+            }            
+        }
+
+        public NHibernate.ISession GetSession()
         {
             try
             {
@@ -70,7 +86,6 @@ namespace DalLibrary
                 Console.Write(e.ToString());
                 return null;
             }
-
 
         }
     }
